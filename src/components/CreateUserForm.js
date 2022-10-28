@@ -1,0 +1,64 @@
+import React, { useState } from "react";
+import { CREATE_USER } from "../graphql/mutations";
+import { useMutation } from "@apollo/client";
+
+function UserForm() {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [createUser, { error, data }] = useMutation(CREATE_USER);
+
+  const addUser = async () => {
+    await createUser({
+      variables: {
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        password: password,
+      },
+    });
+
+    if (error) {
+      console.log(error);
+    } else {
+      console.log(data);
+    }
+  };
+  return (
+    <div>
+      <input
+        type="text"
+        placeholder="First Name"
+        onChange={(e) => {
+          setFirstName(e.target.value);
+        }}
+      />
+      <input
+        type="text"
+        placeholder="Last Name"
+        onChange={(e) => {
+          setLastName(e.target.value);
+        }}
+      />
+      <input
+        type="text"
+        placeholder="Email"
+        onChange={(e) => {
+          setEmail(e.target.value);
+        }}
+      />
+      <input
+        type="text"
+        placeholder="Password"
+        onChange={(e) => {
+          setPassword(e.target.value);
+        }}
+      />
+      <button onClick={addUser}> Create User</button>
+    </div>
+  );
+}
+
+export default UserForm;
